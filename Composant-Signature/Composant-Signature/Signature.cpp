@@ -13,20 +13,21 @@
 string Signature::signMessage(string data, string private_key) {
     uECC_Curve curve = uECC_secp256k1();
     
-    uint8_t* hash = hex_str_to_uint8(data.c_str());
+    uint8_t* hash = hex_str_to_uint8(data.c_str()); // inutile si l'argument data est un hash
+    // define HASH_SIZE 64 ;
     uint8_t* _private = hex_str_to_uint8(private_key.c_str());
-    uint8_t sig[64] = { 0 };
+    uint8_t signature[128] = { 0 };
 
-    if (!uECC_sign(_private, hash, sizeof(hash), sig, curve)) {
+    if (!uECC_sign(_private, hash, sizeof(hash), signature, curve)) {
         cout << "uECC_sign() failed" << endl;
     }
-    return data;
+    return data; // return signature;
 }
 
 bool Signature::validateSignature(string data, string public_key, string _signature) {
     uECC_Curve curve = uECC_secp256k1();
     
-    uint8_t* hash = hex_str_to_uint8(data.c_str());
+    uint8_t* hash = hex_str_to_uint8(data.c_str()); // inutile si l'argument data est un hash
     uint8_t* _public = hex_str_to_uint8(public_key.c_str());
     uint8_t* _sig = hex_str_to_uint8(_signature.c_str());
 
